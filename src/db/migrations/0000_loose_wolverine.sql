@@ -8,3 +8,10 @@ CREATE TABLE "favorites" (
 	"servings" integer,
 	"created_at" timestamp DEFAULT now()
 );
+
+CREATE TABLE "pushToken" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"token" text UNIQUE NOT NULL,
+	"user_id" text,
+	"created_at" timestamp DEFAULT now()
+);

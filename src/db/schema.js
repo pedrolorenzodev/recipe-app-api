@@ -10,3 +10,10 @@ export const favoritesTable = pgTable("favorites", {
   servings: integer("servings"),
   createdAt: timestamp("created_at").defaultNow(),
 })
+
+export const pushTokenTable = pgTable("pushToken", {
+  id: serial("id").primaryKey(),
+  token: text("token").unique().notNull(),
+  userId: text("user_id"),
+  createdAt: timestamp("created_at").defaultNow(),
+})

@@ -1,7 +1,7 @@
 import express from "express";
 import { ENV } from "./config/env.js";
 import { db } from "./config/db.js";
-import { favoritesTable } from "./db/schema.js";
+import { favoritesTable, pushTokenTable } from "./db/schema.js";
 import { and, eq } from "drizzle-orm";
 import job from "./config/cron.js";
 
@@ -15,6 +15,34 @@ app.use(express.json()); // if you don't add this, all of the fields (line 17) w
 app.get("/api/health", (req, res) => {
   res.status(200).json({ success: true });
 });
+
+app.post("/api/pushToken", async (req, res) => {
+  try {
+    const {token, userId} = req.body
+
+    const set = {createdAt: new Date()}
+    if (userId) set.userId = userId
+
+    if (!token) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    const newToken = await db
+    .insert(pushTokenTable)
+    .values({
+      token,
+      userId,
+    }).onConflictDoUpdate({
+      target: pushTokenTable.token, set
+    })
+    .returning()
+
+    res.status(201).json(newToken[0])
+  } catch (e) {
+    console.log("Error getting push token", e);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+})
 
 // First endpoint (Add Favorites)
 app.post("/api/favorites", async (req, res) => {
