@@ -15,3 +15,10 @@ CREATE TABLE "pushToken" (
 	"user_id" text,
 	"created_at" timestamp DEFAULT now()
 );
+
+CREATE TABLE "ticketSuccessId" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"ticket_id" text NOT NULL,
+	"token" text UNIQUE NOT NULL,
+	"created_at" timestamp DEFAULT now()
+)

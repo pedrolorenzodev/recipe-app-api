@@ -4,11 +4,17 @@ import { db } from "./config/db.js";
 import { favoritesTable, pushTokenTable } from "./db/schema.js";
 import { and, eq } from "drizzle-orm";
 import job from "./config/cron.js";
+import randomNotificationCron from "./config/randomNotificationCron.js";
+import receiptCron from "./config/receiptCron.js";
 
 const app = express();
 const PORT = ENV.PORT || 5001;
 
-if (ENV.NODE_ENV === "production") job.start(); // Request every 14 Mins, only in production
+if (ENV.NODE_ENV === "production") {
+  job.start();
+  randomNotificationCron.start();
+  receiptCron.start();
+}
 
 app.use(express.json()); // if you don't add this, all of the fields (line 17) will be UNDEFINED
 

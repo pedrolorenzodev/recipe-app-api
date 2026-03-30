@@ -17,3 +17,10 @@ export const pushTokenTable = pgTable("pushToken", {
   userId: text("user_id"),
   createdAt: timestamp("created_at").defaultNow(),
 })
+
+export const ticketSuccessIdTable = pgTable("ticketSuccessId", {
+  id: serial("id").primaryKey(),
+  ticketId: text("ticket_id").notNull(),
+  token: text("token").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+})
